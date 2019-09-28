@@ -8,26 +8,31 @@
 						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 <!--数据源配置dbcp-->
+<!--
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/activiti?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;zeroDateTimeBehavior=convertToNull" />
         <property name="username" value="root" />
         <property name="password" value="root1234" />
     </bean>
+-->
     <!--activiti单独运行的ProcessEngine配置对象(processEngineConfiguration),使用单独启动方式
-        默认情况下：bean的id=processEngineConfiguration
+        默认情况下：bean的id=processEngineConfiguration，也可以将id改为自定义的名称，但是在初始化表的时候，就需要使用带beanName参数的初始化方法了
+        详见com.zhouyuan.saas.ihrm.activiti.ActivitiInitDataTablesTest.initTbls1
     -->
 
     <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
         <!--代表数据源-->
+<!--
         <property name="dataSource" ref="dataSource"></property>
+-->
 
-
-        <!-- <property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
-         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/activiti" />
+         <!--数据源既可以像上面一样单独配置，也可以配置在这里的property里-->
+         <property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
+         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/activiti?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;zeroDateTimeBehavior=convertToNull" />
          <property name="jdbcUsername" value="root" />
-         <property name="jdbcPassword" value="root" />-->
-        <!--代表是否生成表结构-->
+         <property name="jdbcPassword" value="root1234" />
+        <!--代表是否生成表结构，false不会创建表，会报错-->
         <property name="databaseSchemaUpdate" value="true"/>
     </bean>
 

@@ -2,6 +2,8 @@ package com.zhouyuan.saas.ihrm.activiti;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
+import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.RuntimeService;
 import org.junit.Test;
 
 public class ActivitiInitDataTablesTest extends ActivitiApplicationTests {
@@ -36,6 +38,22 @@ public class ActivitiInitDataTablesTest extends ActivitiApplicationTests {
         ProcessEngine engine = configuration.buildProcessEngine();
 
         //3.输出processEngine对象
+        System.out.println(engine);
+    }
+
+    @Test
+    public void initTbls2(){
+
+        /**
+         * 要使用下面这个简单的语句来生成给processEngine对象并创建Activiti数据库表，有两个前提条件：
+         * 1，Activiti的配置文件名必须为默认的activiti.cfg.xml
+         * 2，activiti.cfg.xml里面配置processEngineConfiguration的bean的id必须为默认的processEngineConfiguration
+         */
+        ProcessEngine engine = ProcessEngines.getDefaultProcessEngine();
+
+        RuntimeService runtimeService = engine.getRuntimeService();
+
+        //输出processEngine对象
         System.out.println(engine);
     }
 }

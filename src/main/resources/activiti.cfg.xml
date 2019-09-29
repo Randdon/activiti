@@ -27,7 +27,7 @@
         <property name="dataSource" ref="dataSource"></property>
 -->
 
-         <!--数据源既可以像上面一样单独配置，也可以配置在这里的property里-->
+         <!--数据源既可以像上面一样单独配置，也可以配置在这里的property里，视频中推荐的方式是单独配置-->
          <property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
          <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/activiti?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;zeroDateTimeBehavior=convertToNull" />
          <property name="jdbcUsername" value="root" />

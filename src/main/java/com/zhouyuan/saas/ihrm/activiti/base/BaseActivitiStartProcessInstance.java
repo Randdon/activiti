@@ -11,15 +11,19 @@ import org.activiti.engine.runtime.ProcessInstance;
  * `act_hi_actinst` 已完成的活动信息
  * `act_hi_identitylink` 参与者信息
  * `act_hi_procinst` 流程实例
- * `act_hi_taskinst` 任务实例
+ * `act_hi_taskinst` 历史任务实例
  * `act_ru_execution` 执行表
- * `act_ru_identitylink` 参与者信息
- * `act_ru_task` 任务
+ * `act_ru_identitylink` 正在执行的参与者信息
+ * `act_ru_task` 目前正在执行的任务
  */
 public class BaseActivitiStartProcessInstance {
 
     public static void main(String[] args) {
 
+        startProcessInstance("holiday");
+    }
+
+    public static void startProcessInstance(String processDefinitionKey){
         //1.得到ProcessEngine对象
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 
@@ -27,7 +31,7 @@ public class BaseActivitiStartProcessInstance {
         RuntimeService runtimeService = processEngine.getRuntimeService();
 
         //3.创建流程实例  流程定义的key需要知道 holiday
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("holiday");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey);
 
         //4.输出流程实例的相关信息
         System.out.println("部署ID：" + processInstance.getDeploymentId());
@@ -35,5 +39,6 @@ public class BaseActivitiStartProcessInstance {
         System.out.println("流程实例ID：" + processInstance.getId());
         System.out.println("流程实例ID：" + processInstance.getProcessInstanceId());
         System.out.println("活动ID：" + processInstance.getActivityId());
+
     }
 }

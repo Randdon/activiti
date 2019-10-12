@@ -20,7 +20,8 @@ public class BaseActivitiStartProcessInstance {
 
     public static void main(String[] args) {
 
-        startProcessInstance("holiday");
+        //startProcessInstance("holiday");
+        startProcessInstanceV2("holiday","12345");
     }
 
     public static void startProcessInstance(String processDefinitionKey){
@@ -40,5 +41,27 @@ public class BaseActivitiStartProcessInstance {
         System.out.println("流程实例ID：" + processInstance.getProcessInstanceId());
         System.out.println("活动ID：" + processInstance.getActivityId());
 
+    }
+
+    /**
+     * 该方法主要用于将业务系统与Activiti整合起来
+     * 启动流程实例，添加进业务标识businessKey
+     * 本质：act_ru_execution表中的businessKey的字段要存入业务标识
+     * @param processDefinitionKey
+     */
+    public static void startProcessInstanceV2(String processDefinitionKey,String businessKey){
+        //1.得到ProcessEngine对象
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+
+        //2.得到RunService对象
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+
+        //3.启动流程实例,同时还要指定业务标识businessKey  它本身就是请假单的id
+        //第一个参数：是指流程定义key
+        //第二个参数：业务标识businessKey
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefinitionKey,businessKey);
+
+        //4.输出processInstance相关的属性,取出businessKey使用:processInstance.getBusinessKey()
+        System.out.println(processInstance.getBusinessKey());
     }
 }

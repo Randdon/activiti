@@ -24,7 +24,7 @@ public class BaseActivitiDeploy {
      * `act_re_procdef`——存储了流程定义的一些信息
      * `act_ge_bytearray` ——存储了bpmn和png文件
      */
-    public static void deploy(){
+    public static void deploy(String bpmnPath,String pngPath){
 
         //创建processEngine对象
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
@@ -34,8 +34,8 @@ public class BaseActivitiDeploy {
 
         //进行部署
         Deployment deployment = repositoryService.createDeployment()
-                .addClasspathResource("diagram/holiday.bpmn")//添加bpmn资源
-                .addClasspathResource("diagram/holiday.png")//添加png资源
+                .addClasspathResource(bpmnPath)//添加bpmn资源
+                .addClasspathResource(pngPath)//添加png资源
                 .name("请假流程")
                 .deploy();
 

@@ -5,6 +5,9 @@ import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 启动流程实例，前提是已经完成流程定义的部署工作
  * 影响到的数据库表有：
@@ -21,7 +24,8 @@ public class BaseActivitiStartProcessInstance {
     public static void main(String[] args) {
 
         //startProcessInstance("holiday");
-        startProcessInstanceV2("holiday","12345");
+        //startProcessInstanceV2("holiday","12345");
+        startProcessInstanceByUELExpression("holiday1");
     }
 
     public static void startProcessInstance(String processDefinitionKey){
@@ -63,5 +67,37 @@ public class BaseActivitiStartProcessInstance {
 
         //4.输出processInstance相关的属性,取出businessKey使用:processInstance.getBusinessKey()
         System.out.println(processInstance.getBusinessKey());
+    }
+
+    /**
+     * 采用UEL表达式的方式动态配置每个任务节点的负责人
+     * @param processDefinitionKey
+     */
+    public static void startProcessInstanceByUELExpression(String processDefinitionKey){
+
+        //先部署采用了UEL表达式来指定任务负责人的资源文件
+        //采用diagram/holiday_UEL.bpmn和diagram/holiday_UEL.png的名称会部署失败，提示找不到资源
+        BaseActivitiDeploy.deploy("diagram/holidayUEL.bpmn","diagram/holidayUEL.png");
+
+        //1.得到ProcessEngine对象
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+
+        //2.得到RunService对象
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+
+        //3.设置assignee的取值   用户可以在界面上设置流程的执行人
+        Map<String,Object> uelDynamicAssignee = new HashMap<>(3);
+        uelDynamicAssignee.put("assignee0","Tom");
+        uelDynamicAssignee.put("assignee1","Jerry");
+        uelDynamicAssignee.put("assignee2","Winnie");
+
+        //3.启动流程实例,同时还要设置流程定义的assignee的值
+        //第一个参数：是指流程定义key
+        //第二个参数：流程变量，为流程定义的assignee赋值
+        ProcessInstance processInstance =
+                runtimeService.startProcessInstanceByKey(processDefinitionKey,uelDynamicAssignee);
+
+        //4.输出processInstance相关的属性,取出businessKey使用:processInstance.getBusinessKey()
+        System.out.println(processInstance.getName());
     }
 }

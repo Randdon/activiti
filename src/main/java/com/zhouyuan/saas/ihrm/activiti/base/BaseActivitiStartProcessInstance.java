@@ -46,7 +46,7 @@ public class BaseActivitiStartProcessInstance {
     /**
      * 该方法主要用于将业务系统与Activiti整合起来
      * 启动流程实例，添加进业务标识businessKey
-     * 本质：act_ru_execution表中的businessKey的字段要存入业务标识
+     * 本质：act_ru_execution和`act_hi_procinst` 表中的businessKey的字段要存入业务标识
      * @param processDefinitionKey
      */
     public static void startProcessInstanceV2(String processDefinitionKey,String businessKey){

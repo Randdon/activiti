@@ -79,25 +79,34 @@ public class BaseActivitiStartProcessInstance {
         //采用diagram/holiday_UEL.bpmn和diagram/holiday_UEL.png的名称会部署失败，提示找不到资源
         BaseActivitiDeploy.deploy("diagram/holidayUEL.bpmn","diagram/holidayUEL.png");
 
+        //3.设置流程定义的assignee的值 用户可以在界面上设置流程的执行人
+        Map<String,Object> uelDynamicAssignee = new HashMap<>(3);
+        uelDynamicAssignee.put("assignee0","Tom");
+        uelDynamicAssignee.put("assignee1","Jerry");
+        uelDynamicAssignee.put("assignee2","Winnie");
+
+        startProcessInstanceWithProcessVariable(processDefinitionKey,uelDynamicAssignee);
+    }
+
+    /**
+     * 启动流程实例，并设置流程变量
+     * @param processDefinitionKey 流程定义key
+     * @param processVariable 流程变量
+     */
+    public static void startProcessInstanceWithProcessVariable(
+            String processDefinitionKey, Map<String,Object> processVariable){
+
         //1.得到ProcessEngine对象
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 
         //2.得到RunService对象
         RuntimeService runtimeService = processEngine.getRuntimeService();
 
-        //3.设置assignee的取值   用户可以在界面上设置流程的执行人
-        Map<String,Object> uelDynamicAssignee = new HashMap<>(3);
-        uelDynamicAssignee.put("assignee0","Tom");
-        uelDynamicAssignee.put("assignee1","Jerry");
-        uelDynamicAssignee.put("assignee2","Winnie");
-
-        //3.启动流程实例,同时还要设置流程定义的assignee的值
-        //第一个参数：是指流程定义key
-        //第二个参数：流程变量，为流程定义的assignee赋值
+        //3.启动流程实例,同时还要设置流程变量
         ProcessInstance processInstance =
-                runtimeService.startProcessInstanceByKey(processDefinitionKey,uelDynamicAssignee);
+                runtimeService.startProcessInstanceByKey(processDefinitionKey,processVariable);
 
-        //4.输出processInstance相关的属性,取出businessKey使用:processInstance.getBusinessKey()
+        //4.输出processInstance相关的属性
         System.out.println(processInstance.getName());
     }
 }

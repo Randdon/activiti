@@ -3,6 +3,7 @@ package com.zhouyuan.saas.ihrm.activiti.base;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
 
 public class BaseActiveCompleteTask {
 
@@ -30,5 +31,18 @@ public class BaseActiveCompleteTask {
 
         //3.处理任务,结合当前用户任务列表的查询操作的话,例如任务ID:5002
         taskService.complete(taskId);
+    }
+
+    /**
+     * 根据流程定义主键和任务执行人完成任务
+     * @param definitionKey
+     * @param assignee
+     */
+    public static void completeTaskByAssignee(String definitionKey,String assignee){
+        Task task = BaseActivitiQueryTask.queryTask(definitionKey,assignee).get(0);
+        if (null != task){
+            BaseActiveCompleteTask.completeTask(task.getId());
+            System.out.println(task.getId() + "任务执行完毕");
+        }
     }
 }

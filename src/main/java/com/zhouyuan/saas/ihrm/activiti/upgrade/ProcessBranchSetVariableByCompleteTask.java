@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 根据请假天数是否小于3天判断流程分支的走向，在启动流程实例时注入流程变量
+ * 根据请假天数是否小于3天判断流程分支的走向，在完成任务时注入流程变量
  */
-public class ProcessBranchSetVariableByStart {
+public class ProcessBranchSetVariableByCompleteTask {
 
     /**
      * diagram/holidayWithBranch.bpmn的流程定义主键
@@ -43,8 +43,8 @@ public class ProcessBranchSetVariableByStart {
      */
     public static void testProcessByHolidayNum(Float num){
 
-        //启动流程实例，将请假天数在启动时加入到该流程的流程变量中去
-        setVariableByStart(num);
+        //启动流程实例
+        BaseActivitiStartProcessInstance.startProcessInstance(DEFINITION_KEY);
 
         //根据请假天数选择不同的流程处理群组
         String[] assgineeArr = assigneeArrNotLtThree;
@@ -52,24 +52,23 @@ public class ProcessBranchSetVariableByStart {
             assgineeArr = assigneeArrLtThree;
         }
 
+        //构造流程变量
+        Holiday holiday = new Holiday();
+        holiday.setNum(num);
+        Map<String,Object> map = new HashMap<>(1);
 
         for (String assignee:
                 assgineeArr) {
             //完成任务
-            BaseActiveCompleteTask.completeTaskByAssignee(DEFINITION_KEY,assignee,null);
+            if ("Tom".equals(assignee)){
+                //在提交请假单操作完成时赋予流程实例以流程变量
+                map.put("holiday",holiday);
+            }
+            else {
+                map = null;
+            }
+            BaseActiveCompleteTask.completeTaskByAssignee(DEFINITION_KEY,assignee,map);
         }
-    }
-
-    /**
-     * 在启动流程实例的时候设置流程变量
-     * @param num 请假天数
-     */
-    public static void setVariableByStart(Float num){
-        Holiday holiday = new Holiday();
-        holiday.setNum(num);
-        Map<String,Object> map = new HashMap<>(1);
-        map.put("holiday",holiday);
-        BaseActivitiStartProcessInstance.startProcessInstanceWithProcessVariable(DEFINITION_KEY,map);
     }
 
 }

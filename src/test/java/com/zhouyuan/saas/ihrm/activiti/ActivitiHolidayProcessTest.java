@@ -12,11 +12,11 @@ public class ActivitiHolidayProcessTest extends ActivitiApplicationTests {
         //目前构造的请假流程只有一个任务，所以直接get（0）获取到该任务
         String taskId = BaseActivitiQueryTask.queryTask(PROCESS_DEFINITIION_KEY,"James").get(0).getId();
         //部门经理审批
-        BaseActiveCompleteTask.completeTask(taskId);
+        BaseActiveCompleteTask.completeTask(taskId,null);
 
         taskId = BaseActivitiQueryTask.queryTask(PROCESS_DEFINITIION_KEY,"Lana De").get(0).getId();
         //总经理审批
-        BaseActiveCompleteTask.completeTask(taskId);
+        BaseActiveCompleteTask.completeTask(taskId,null);
 
         /**
          * 当最后一个审批流程，即总经理审批完成后

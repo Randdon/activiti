@@ -6,6 +6,8 @@ import java.util.Date;
 /**
  * 请假实体类:
  *    注意POJO类型，在用于流程变量时一定要实现Serializable接口，否则在存储这个pojo时就会报异常
+ *    没有实现Serializable接口就在启动流程实例时用该实体作为流程变量，就会报
+ *    org.activiti.engine.ActivitiException: couldn't find a variable type that is able to serialize
  */
 public class Holiday implements Serializable {
 

@@ -109,4 +109,30 @@ public class BaseActivitiStartProcessInstance {
         //4.输出processInstance相关的属性
         System.out.println(processInstance.getName());
     }
+
+    /**
+     * 通过流程实例ID，在启动流程实例并且该实例未执行完成时注入流程变量
+     * @param processDefinitionKey
+     * @param processVariable
+     */
+    public static void setVariableByProcessInstanceId(
+            String processDefinitionKey, Map<String,Object> processVariable){
+
+        //1.得到ProcessEngine对象
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+
+        //2.得到RunService对象
+        RuntimeService runtimeService = processEngine.getRuntimeService();
+
+        //3.启动流程实例
+        ProcessInstance processInstance =
+                runtimeService.startProcessInstanceByKey(processDefinitionKey);
+
+        //启动流程实例后注入流程变量
+        runtimeService.setVariables(processInstance.getId(),processVariable);
+
+        //4.输出processInstance相关的属性
+        System.out.println(processInstance.getName());
+    }
+
 }

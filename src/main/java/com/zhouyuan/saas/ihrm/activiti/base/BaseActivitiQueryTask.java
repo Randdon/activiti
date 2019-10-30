@@ -40,6 +40,34 @@ public class BaseActivitiQueryTask {
         return taskList;
     }
 
+    /**
+     * 根据候选人查询任务
+     * @param processDefinitionKey
+     * @param candidateUser
+     * @return
+     */
+    public static Task queryGroupTask(String processDefinitionKey, String candidateUser){
+
+        //1.得到ProcessEngine对象
+        ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+
+        //2.得到TaskService对象
+        TaskService taskService = processEngine.getTaskService();
+
+        //3.根据流程定义的key和候选人来实现当前用户的任务列表查询
+        Task task = taskService.createTaskQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .taskCandidateUser(candidateUser)//该任务的候选人
+                .singleResult();
+
+        if (null != task){
+            System.out.println("流程实例ID：" + task.getProcessDefinitionId());
+            System.out.println("任务ID：" + task.getId());
+            System.out.println("任务负责人：" + task.getAssignee());
+            System.out.println("任务名称：" + task.getName());
+        }
+        return task;
+    }
     public static void main(String[] args) {
         queryTask("holiday","Tom");
     }

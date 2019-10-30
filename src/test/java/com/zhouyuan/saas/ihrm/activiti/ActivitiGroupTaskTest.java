@@ -12,6 +12,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 组任务-Candidate-Users流程定义、部署、启动、查询、候选人认领任务、退回任务、交接任务、完成任务流程测试类
+ * 流程中的参与者的身份变化会记录在`act_hi_identitylink` 表中
+ */
 public class ActivitiGroupTaskTest extends ActivitiApplicationTests {
 
     private final String PROCESS_DEFINE_KEY = "holidayGroupTask";
@@ -69,13 +73,29 @@ public class ActivitiGroupTaskTest extends ActivitiApplicationTests {
             taskOfMclellan = BaseActivitiQueryTask.queryGroupTask(PROCESS_DEFINE_KEY,"Mclellan");
             if (null != taskOfMclellan){
 
+                //任务负责人改为Mclellan
                 taskService.claim(taskOfHarvey.getId(),"Mclellan");
                 taskOfMclellan = BaseActivitiQueryTask.queryTask(PROCESS_DEFINE_KEY,"Mclellan").get(0);
-                //完成任务
-                BaseActiveCompleteTask.completeTask(taskOfMclellan.getId(),null);
+
+                //任务交接，任务的接收者可以不是候选人
+                if (null != taskOfMclellan){
+                    //Mclellan将任务交接给SpiderMan，数据库中的任务负责人变为SpiderMan
+                    taskService.setAssignee(taskOfMclellan.getId(),"SpiderMan");
+                }
+                Task spiderManTask = BaseActivitiQueryTask.queryTask(PROCESS_DEFINE_KEY, "SpiderMan").get(0);
+
+                if (null != spiderManTask){
+                    //完成任务
+                    BaseActiveCompleteTask.completeTask(spiderManTask.getId(),null);
+                }
             }
 
         }
+    }
+
+    @Test
+    public void finishProcess(){
+        BaseActiveCompleteTask.completeTask("23",null);
     }
 
 }

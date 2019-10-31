@@ -35,6 +35,18 @@ public class ProcessBranchSetVariableByStart {
         testProcessByHolidayNum(1F);
         //大于等于3天的情况
         testProcessByHolidayNum(3F);
+        /**
+         * 两个条件都不满足的情况，流程走到部门经理审批时，该环境无法完成任务，完成任务时就会报错：
+         * org.activiti.engine.ActivitiException:
+         * No outgoing sequence flow of element '_4' could be selected for continuing the process
+         */
+        testProcessByHolidayNum(null);
+
+        /**
+         * 如果流程定义中两个分支的条件分别为num>3和num>1那么当流程变量num为5时，就会遇到两个分支条件都满足的情况，这种情况下，
+         * 这两个流程分支就都会被执行，即数据库中执行完部门经理审批后会同时出现总经理审批和人事归档两条记录，
+         * 要解决这个问题，就要使用网关了，见com.zhouyuan.saas.ihrm.activiti.ExclusiveGatewayProcessTest
+         */
     }
 
     /**

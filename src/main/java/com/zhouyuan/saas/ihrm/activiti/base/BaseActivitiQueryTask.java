@@ -31,7 +31,7 @@ public class BaseActivitiQueryTask {
                 .list();
         taskList.stream()
                 .forEach(task -> {
-                    System.out.println("流程实例ID：" + task.getProcessDefinitionId());
+                    System.out.println("流程定义ID：" + task.getProcessDefinitionId());
                     System.out.println("任务ID：" + task.getId());
                     System.out.println("任务负责人：" + task.getAssignee());
                     System.out.println("任务名称：" + task.getName());

@@ -74,6 +74,13 @@
             <version>7.0.0.Beta1</version>
         </dependency>
 
+        <!--Activiti整合SpringBoot-->
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-spring-boot-starter</artifactId>
+            <version>7.0.0.Beta2</version>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

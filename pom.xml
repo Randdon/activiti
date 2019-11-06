@@ -33,6 +33,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+<!--        <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-engine</artifactId>
             <version>7.0.0.Beta1</version>
@@ -72,9 +77,11 @@
             <groupId>org.activiti.cloud</groupId>
             <artifactId>activiti-cloud-services-api</artifactId>
             <version>7.0.0.Beta1</version>
-        </dependency>
+        </dependency>-->
 
-        <!--Activiti整合SpringBoot-->
+        <!--Activiti7整合SpringBoot，要使用此种方式需要注释掉以上相关的activiti的依赖，否则会出现同名同路径class加载错误
+        com.zhouyuan.saas.ihrm.activiti.spring.ActivitiIntegrateSpringbootTest.defininationTest，
+        这两种maven依赖不能共存，要使用上面的依赖，就要注释掉下面的，否则也会报错-->
         <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-spring-boot-starter</artifactId>

@@ -8,6 +8,9 @@ import org.activiti.api.process.model.builders.ProcessPayloadBuilder;
 import org.activiti.api.process.runtime.ProcessRuntime;
 import org.activiti.api.runtime.shared.query.Page;
 import org.activiti.api.runtime.shared.query.Pageable;
+import org.activiti.api.task.model.Task;
+import org.activiti.api.task.model.builders.TaskPayloadBuilder;
+import org.activiti.api.task.runtime.TaskRuntime;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +36,12 @@ public class ActivitiIntegrateSpringbootTest extends ActivitiApplicationTests {
     private final Logger logger = LoggerFactory.getLogger(ActivitiIntegrateSpringbootTest.class);
 
     private final String PROCESS_DEFINE_KEY = "activitiIntegrateSpringbootDemo";
+
     @Autowired
     ProcessRuntime processRuntime;//流程定义相关操作
+
+    @Autowired
+    TaskRuntime taskRuntime;//任务相关操作
 
     @Autowired
     SecurityUtil securityUtil;//Spring Security相关的工具类
@@ -67,5 +74,38 @@ public class ActivitiIntegrateSpringbootTest extends ActivitiApplicationTests {
                 .withProcessInstanceName("Springboot+Activiti`s First Test")
                 .build());
         logger.info("启动流程实例：{}",processInstance);
+    }
+
+    /**
+     * 查询并认领、完成任务
+     */
+    @Test
+    public void queryAndCompeleteTask(){
+        securityUtil.logInAs("salaboy");
+        //查询任务
+        Page<Task> taskPage = taskRuntime.tasks(Pageable.of(0, 10));
+        if (taskPage.getTotalItems()>0){
+            //如果查询到任务为
+            taskPage.getContent().forEach(task -> {
+                logger.info("第一次查询到任务：{}",task);
+                //认领任务
+                taskRuntime.claim(TaskPayloadBuilder.claim().withTaskId(task.getId()).build());
+                //完成任务
+                taskRuntime.complete(TaskPayloadBuilder.complete().withTaskId(task.getId()).build());
+            });
+        }
+
+        //再次查询任务
+        taskPage = taskRuntime.tasks(Pageable.of(0, 10));
+        if (taskPage.getTotalItems()>0){
+            //如果查询到任务为
+            taskPage.getContent().forEach(task -> {
+                logger.info("第二次查询到任务：{}",task);
+                //认领任务
+                taskRuntime.claim(TaskPayloadBuilder.claim().withTaskId(task.getId()).build());
+                //完成任务
+                taskRuntime.complete(TaskPayloadBuilder.complete().withTaskId(task.getId()).build());
+            });
+        }
     }
 }
